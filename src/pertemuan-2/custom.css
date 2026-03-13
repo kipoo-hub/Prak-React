@@ -1,0 +1,81 @@
+/* Import font 'Inter' dari Google Fonts untuk tampilan yang lebih modern */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Styling untuk keseluruhan halaman */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #FFF8DC 0%, #BDB76B 100%);
+    color: #334155; /* Warna teks yang lebih lembut di mata daripada hitam pekat */
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh; /* Memastikan background memenuhi layar */
+    display: flex; /* Membantu menengahkan kartu secara vertikal dan horizontal */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container utama (Card) */
+.card {
+    width: 100%;
+    max-width: 600px;
+    background: #FFF8DC;
+    padding: 40px;
+    border-radius: 16px; /* Lengkungan yang lebih membulat */
+    /* Bayangan berlapis (layered shadow) untuk efek 3D yang sangat halus */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 20px 48px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transisi halus untuk efek hover */
+}
+
+/* Efek saat kursor diarahkan ke kartu */
+.card:hover {
+    transform: translateY(-5px); /* Kartu sedikit terangkat */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Header utama */
+h1 {
+    text-align: center;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 24px;
+    /* Efek teks gradasi modern (Biru ke Ungu) */
+    background: linear-gradient(90deg, #B8860B, #BDB76B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Paragraf */
+p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #475569;
+    margin-bottom: 20px;
+}
+
+/* Garis pemisah */
+hr {
+    border: none;
+    height: 1px;
+    /* Garis memudar di bagian ujung kiri dan kanan */
+    background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+    margin: 30px 0;
+}
+
+/* Greeting / Teks kecil */
+small {
+    display: block;
+    font-style: normal;
+    font-weight: 600;
+    text-align: center;
+    color: #94a3b8;
+    margin-top: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px; /* Memberi jarak antar huruf agar terlihat lebih premium */
+    font-size: 12px;
+}
+
+img {
+    width: 300px;
+    height: auto;
+    padding: 15%;
+}
