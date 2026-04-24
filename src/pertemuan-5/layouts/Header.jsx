@@ -40,7 +40,7 @@ export default function Header() {
 
                 <div className="flex items-center space-x-4 border-l pl-4 border-gray-300">
                     <span>
-                        Hello, <b>Muhammad Johan</b>
+                        Hello, <b>Muhammad Taufiq</b>
                     </span>
                     <img
                         src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png"

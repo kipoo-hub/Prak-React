@@ -16,7 +16,7 @@ export default function Dashboard() {
             {/* Title Section */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
-                <p className="text-gray-400">Selamat datang kembali, Muhammad Johan!</p>
+                <p className="text-gray-400">Selamat datang kembali, Muhammad Taufiq!</p>
             </div>
 
             {/* Stats Cards */}
