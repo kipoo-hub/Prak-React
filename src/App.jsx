@@ -1,67 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import "./assets/tailwind.css";
 
-const App = () => {
-  const videos = Array(12).fill({
-    title: "Membangun Aplikasi Profesional dengan React & CSS",
-    author: "Gemini Developer",
-    views: "1.2jt x ditonton",
-    time: "2 jam yang lalu",
-    thumbnail: "https://via.placeholder.com/320x180/282828/ffffff?text=Video+Thumbnail"
-  });
+import Sidebar from "./layouts/Sidebar";
+import Header from "./layouts/Header";
+import Dashboard from "./pages/Dashboard";
+import Orders from "./pages/Orders";
+import Customers from "./pages/Customers";
+import NotFound from "./components/NotFound";
 
-  return (
-    <div className="container">
-      {/* --- Header / Navbar --- */}
-      <nav className="navbar">
-        <div className="nav-left">
-          <div className="menu-icon">☰</div>
-          <div className="logo">YouTube<sup>ID</sup></div>
-        </div>
-        <div className="nav-center">
-          <input type="text" placeholder="Telusuri" className="search-bar" />
-          <button className="search-btn">🔍</button>
-        </div>
-        <div className="nav-right">
-          <div className="nav-icons">🔔</div>
-          <div className="user-avatar">G</div>
-        </div>
-      </nav>
+function App() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const location = useLocation();
 
-      <div className="main-layout">
-        {/* --- Sidebar --- */}
-        <aside className="sidebar">
-          <div className="sidebar-item active">🏠 Beranda</div>
-          <div className="sidebar-item">🎬 Shorts</div>
-          <div className="sidebar-item">📺 Subskripsi</div>
-          <hr />
-          <div className="sidebar-item">📚 Koleksi</div>
-          <div className="sidebar-item">🕒 Histori</div>
-        </aside>
+    // cek apakah route valid
+    const validRoutes = ["/", "/orders", "/customers"];
+    const isErrorPage = !validRoutes.includes(location.pathname);
 
-        {/* --- Video Grid --- */}
-        <main className="content">
-          <div className="video-grid">
-            {videos.map((video, index) => (
-              <div key={index} className="video-card">
-                <img src={video.thumbnail} alt="thumb" className="thumbnail" />
-                <div className="video-info">
-                  <div className="channel-icon"></div>
-                  <div className="video-text">
-                    <h4 className="video-title">{video.title}</h4>
-                    <p className="video-meta">{video.author}</p>
-                    <p className="video-meta">{video.views} • {video.time}</p>
-                  </div>
+    // 👉 kalau error → tampil full screen TANPA sidebar
+    if (isErrorPage) {
+        return <NotFound />;
+    }
+
+    return (
+        <div className="flex min-h-screen bg-[#FDFDFD] font-sans">
+            <Sidebar />
+
+            <div className="flex-1 flex flex-col">
+                <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+                <div className="flex-1 p-4 overflow-y-auto">
+                    <Routes>
+                        <Route path="/" element={<Dashboard searchTerm={searchTerm} />} />
+                        <Route path="/orders" element={<Orders />} />
+                        <Route path="/customers" element={<Customers />} />
+                    </Routes>
                 </div>
-              </div>
-            ))}
-          </div>
-        </main>
-      </div>
-    </div>
-  );
-};
+            </div>
+        </div>
+    );
+}
 
 export default App;
