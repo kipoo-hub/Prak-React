@@ -2,11 +2,13 @@ import { NavLink } from "react-router-dom";
 import { AiFillAppstore, AiFillCustomerService } from "react-icons/ai";
 import { TbListDetails } from "react-icons/tb";
 import { FaPlus, FaChevronRight } from "react-icons/fa";
+import { BiSolidCart } from "react-icons/bi";
 
 export default function Sidebar() {
 
     const menuList = [
     { id: "dashboard", name: "Dashboard", icon: <AiFillAppstore size={22} />, to: "/" },
+    { id: "produk",    name: "Produk",    icon: <BiSolidCart size={22} />, to: "/products" },
     { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
     { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
 
