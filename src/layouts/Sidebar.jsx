@@ -3,6 +3,7 @@ import { AiFillAppstore, AiFillCustomerService } from "react-icons/ai";
 import { TbListDetails } from "react-icons/tb";
 import { FaPlus, FaChevronRight } from "react-icons/fa";
 import { BiSolidCart } from "react-icons/bi";
+import { MdWidgets } from "react-icons/md";
 
 export default function Sidebar() {
 
@@ -11,6 +12,7 @@ export default function Sidebar() {
     { id: "produk",    name: "Produk",    icon: <BiSolidCart size={22} />, to: "/products" },
     { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
     { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
+    { id: "components", name: "Pemecahan Komponen", icon: <MdWidgets size={22} />, to: "/components" },
 
    
 ];

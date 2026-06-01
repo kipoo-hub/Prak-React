@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
 import Products from './pages/Products';
+import Components from "./pages/Components";
 import NotFound from "./components/NotFound";
 
 // 👉 TAMBAHKAN BARIS IMPORT INI
@@ -19,7 +20,7 @@ function App() {
 
     // cek apakah route valid
     const isProductDetail = location.pathname.startsWith("/products/");
-    const validRoutes = ["/", "/orders", "/customers", "/products"];
+    const validRoutes = ["/", "/orders", "/customers", "/products", "/components"];
     const isErrorPage = !validRoutes.includes(location.pathname) && !isProductDetail;
 
     if (isErrorPage) {
@@ -41,6 +42,7 @@ function App() {
                             <Route path="/orders" element={<Orders />} />
                             <Route path="/customers" element={<Customers />} />
                             <Route path="/products" element={<Products />} />
+                            <Route path="/components" element={<Components />} />
                             
                             <Route path="/products/:id" element={<ProductDetail />} />
                         </Routes>
