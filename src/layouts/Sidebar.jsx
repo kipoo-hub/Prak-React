@@ -4,23 +4,22 @@ import { TbListDetails } from "react-icons/tb";
 import { FaPlus, FaChevronRight } from "react-icons/fa";
 import { BiSolidCart } from "react-icons/bi";
 import { MdWidgets } from "react-icons/md";
+import { HiOutlineCube } from "react-icons/hi"; // 1. Tambahkan import ikon baru di sini
 
 export default function Sidebar() {
 
     const menuList = [
-    { id: "dashboard", name: "Dashboard", icon: <AiFillAppstore size={22} />, to: "/" },
-    { id: "produk",    name: "Produk",    icon: <BiSolidCart size={22} />, to: "/products" },
-    { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
-    { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
-    { id: "components", name: "Pemecahan Komponen", icon: <MdWidgets size={22} />, to: "/components" },
-    { id: "fitur-xyz", name: "Fitur XYZ", icon: <MdWidgets size={22} />, to: "/fitur-xyz" }, // <--- INI SERING TERLUPA, JANGAN LUPA TAMBAHKAN MENU BARU KALAU MAU DITAMBAHKAN DI ROUTES
-
-   
-];
+        { id: "dashboard", name: "Dashboard", icon: <AiFillAppstore size={22} />, to: "/" },
+        { id: "produk",    name: "Produk",    icon: <BiSolidCart size={22} />, to: "/products" },
+        { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
+        { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
+        { id: "components", name: "Pemecahan Komponen", icon: <MdWidgets size={22} />, to: "/components" },
+        { id: "fitur-xyz", name: "Fitur XYZ", icon: <HiOutlineCube size={22} />, to: "/fitur-xyz" }, // 2. Diubah ke ikon HiOutlineCube agar pas dengan tema komponen barumu
+    ];
 
     // ✅ menuClass disesuaikan dengan class baru
     const menuClass = ({ isActive }) =>
-        `flex cursor-pointer items-center rounded-xl p-4 space-x-2
+        `flex cursor-pointer items-center rounded-xl p-4 space-x-2 relative
         ${isActive
             ? "text-hijau bg-green-200 font-extrabold"
             : "text-gray-600 hover:text-hijau hover:bg-green-200 hover:font-extrabold"
@@ -54,20 +53,24 @@ export default function Sidebar() {
                                 <NavLink to={item.to} className={menuClass}>
                                     {({ isActive }) => (
                                         <>
-                                            <div className="flex items-center gap-4 z-10">
-                                                <span className={`${isActive ? "text-green-500" : "text-gray-400 group-hover:text-green-400"} transition-colors duration-300`}>
-                                                    {item.icon}
-                                                </span>
-                                                <span className={`font-semibold text-sm ${isActive ? "opacity-100" : "opacity-80"}`}>
-                                                    {item.name}
-                                                </span>
+                                            <div className="flex items-center gap-4 z-10 w-full justify-between">
+                                                <div className="flex items-center gap-4">
+                                                    <span className={`${isActive ? "text-green-500" : "text-gray-400 group-hover:text-green-400"} transition-colors duration-300`}>
+                                                        {item.icon}
+                                                    </span>
+                                                    <span className={`font-semibold text-sm ${isActive ? "opacity-100" : "opacity-80"}`}>
+                                                        {item.name}
+                                                    </span>
+                                                </div>
+                                                
+                                                {/* Memindahkan render Chevron ke dalam flex box utama agar posisinya pas di ujung kanan */}
+                                                {isActive && (
+                                                    <FaChevronRight size={10} className="text-green-500" />
+                                                )}
                                             </div>
 
                                             {isActive && (
-                                                <>
-                                                    <FaChevronRight size={10} className="text-green-500" />
-                                                    <div className="absolute left-0 w-1.5 h-6 bg-green-500 rounded-r-full"></div>
-                                                </>
+                                                <div className="absolute left-0 w-1.5 h-6 bg-green-500 rounded-r-full"></div>
                                             )}
                                         </>
                                     )}
