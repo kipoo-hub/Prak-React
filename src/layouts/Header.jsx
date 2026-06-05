@@ -33,13 +33,7 @@ export default function Header({ searchTerm, setSearchTerm }) {
                         </span>
                     </div>
 
-                    <div className="p-3 bg-blue-50 rounded-2xl">
-                        <FcAreaChart />
-                    </div>
-
-                    <div className="p-3 bg-red-50 rounded-2xl text-red-500">
-                        <SlSettings />
-                    </div>
+                    
 
                     <div className="flex items-center space-x-4 border-l pl-4 border-gray-300">
                         <span className="hidden md:inline text-sm">
