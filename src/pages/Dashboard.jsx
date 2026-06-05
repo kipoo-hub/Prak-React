@@ -45,7 +45,7 @@ export default function Dashboard({ searchTerm = "" }) {
                 <p className="text-slate-500 mt-2 mb-10 tracking-tight">
                     {searchTerm
                         ? <span>Menampilkan hasil untuk: <b className="text-blue-600 font-semibold">"{searchTerm}"</b></span>
-                        : <span>Selamat datang kembali, <b className="text-slate-800 font-bold">Muhammad Taufik</b> 👋</span>}
+                        : <span>Selamat datang kembali, <b className="text-slate-800 font-bold">Muhammad Taufiq</b> 👋</span>}
                 </p>
 
                 {/* STAT CARDS */}

@@ -13,6 +13,7 @@ export default function Sidebar() {
     { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
     { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
     { id: "components", name: "Pemecahan Komponen", icon: <MdWidgets size={22} />, to: "/components" },
+    { id: "fitur-xyz", name: "Fitur XYZ", icon: <MdWidgets size={22} />, to: "/fitur-xyz" }, // <--- INI SERING TERLUPA, JANGAN LUPA TAMBAHKAN MENU BARU KALAU MAU DITAMBAHKAN DI ROUTES
 
    
 ];

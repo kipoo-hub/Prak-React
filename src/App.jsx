@@ -10,6 +10,7 @@ import Customers from "./pages/Customers";
 import Products from './pages/Products';
 import Components from "./pages/Components";
 import NotFound from "./components/NotFound";
+import CobaFiturXYZ from "./pages/Fitur-Xyz"; // <--- INI SERING TERLUPA, JANGAN LUPA IMPORT HALAMAN BARU KALAU MAU DITAMBAHKAN DI ROUTES
 
 // 👉 TAMBAHKAN BARIS IMPORT INI
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
@@ -20,7 +21,7 @@ function App() {
 
     // cek apakah route valid
     const isProductDetail = location.pathname.startsWith("/products/");
-    const validRoutes = ["/", "/orders", "/customers", "/products", "/components"];
+    const validRoutes = ["/", "/orders", "/customers", "/products", "/components", "/fitur-xyz"];
     const isErrorPage = !validRoutes.includes(location.pathname) && !isProductDetail;
 
     if (isErrorPage) {
@@ -43,7 +44,7 @@ function App() {
                             <Route path="/customers" element={<Customers />} />
                             <Route path="/products" element={<Products />} />
                             <Route path="/components" element={<Components />} />
-                            
+                            <Route path="/fitur-xyz" element={<CobaFiturXYZ />} />
                             <Route path="/products/:id" element={<ProductDetail />} />
                         </Routes>
                     </Suspense>

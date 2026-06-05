@@ -43,7 +43,7 @@ export default function Header({ searchTerm, setSearchTerm }) {
 
                     <div className="flex items-center space-x-4 border-l pl-4 border-gray-300">
                         <span className="hidden md:inline text-sm">
-                            Hello, <span className="font-bold">Muhammad Taufik</span>
+                            Hello, <span className="font-bold">Muhammad Taufiq</span>
                         </span>
                         <img
                             src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png"
