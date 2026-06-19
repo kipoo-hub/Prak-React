@@ -14,7 +14,9 @@ export default function Sidebar() {
         { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
         { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
         { id: "components", name: "Pemecahan Komponen", icon: <MdWidgets size={22} />, to: "/components" },
-        { id: "fitur-xyz", name: "Fitur XYZ", icon: <HiOutlineCube size={22} />, to: "/fitur-xyz" }, // 2. Diubah ke ikon HiOutlineCube agar pas dengan tema komponen barumu
+        { id: "fitur-xyz", name: "Fitur XYZ", icon: <HiOutlineCube size={22} />, to: "/fitur-xyz" }, 
+        { id: "notes", name: "Notes", icon: <HiOutlineCube size={22} />, to: "/notes" },
+        // 2. Diubah ke ikon HiOutlineCube agar pas dengan tema komponen barumu
     ];
 
     // ✅ menuClass disesuaikan dengan class baru

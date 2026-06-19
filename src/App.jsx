@@ -10,18 +10,19 @@ import Customers from "./pages/Customers";
 import Products from './pages/Products';
 import Components from "./pages/Components";
 import NotFound from "./components/NotFound";
-import CobaFiturXYZ from "./pages/Fitur-Xyz"; // <--- INI SERING TERLUPA, JANGAN LUPA IMPORT HALAMAN BARU KALAU MAU DITAMBAHKAN DI ROUTES
+import CobaFiturXYZ from "./pages/Fitur-Xyz";
 
-// 👉 TAMBAHKAN BARIS IMPORT INI
+// Menggunakan Lazy Loading untuk komponen yang lebih berat agar performa lebih optimal
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const Note = lazy(() => import("./pages/Note"));
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
     const location = useLocation();
 
-    // cek apakah route valid
+    // Cek apakah route valid
     const isProductDetail = location.pathname.startsWith("/products/");
-    const validRoutes = ["/", "/orders", "/customers", "/products", "/components", "/fitur-xyz"];
+    const validRoutes = ["/", "/orders", "/customers", "/products", "/components", "/fitur-xyz", "/notes"];
     const isErrorPage = !validRoutes.includes(location.pathname) && !isProductDetail;
 
     if (isErrorPage) {
@@ -36,8 +37,8 @@ function App() {
                 <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
                 <div className="flex-1 p-4 overflow-y-auto">
-                    {/* 👉 Bungkus dengan Suspense karena ProductDetail menggunakan lazy loading */}
-                    <Suspense fallback={<div className="p-4">Loading detail produk...</div>}>
+                    {/* Menggunakan Suspense untuk membungkus komponen lazy loading */}
+                    <Suspense fallback={<div className="p-4">Loading...</div>}>
                         <Routes>
                             <Route path="/" element={<Dashboard searchTerm={searchTerm} />} />
                             <Route path="/orders" element={<Orders />} />
@@ -46,6 +47,7 @@ function App() {
                             <Route path="/components" element={<Components />} />
                             <Route path="/fitur-xyz" element={<CobaFiturXYZ />} />
                             <Route path="/products/:id" element={<ProductDetail />} />
+                            <Route path="/notes" element={<Note />} />
                         </Routes>
                     </Suspense>
                 </div>
