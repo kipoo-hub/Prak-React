@@ -4,9 +4,11 @@ import { TbListDetails } from "react-icons/tb";
 import { FaPlus, FaChevronRight } from "react-icons/fa";
 import { BiSolidCart } from "react-icons/bi";
 import { MdWidgets } from "react-icons/md";
-import { HiOutlineCube } from "react-icons/hi"; // 1. Tambahkan import ikon baru di sini
+import { HiOutlineCube } from "react-icons/hi";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Sidebar() {
+    const { profile, isAdmin } = useAuth();
 
     const menuList = [
         { id: "dashboard", name: "Dashboard", icon: <AiFillAppstore size={22} />, to: "/" },
@@ -16,7 +18,9 @@ export default function Sidebar() {
         { id: "components", name: "Pemecahan Komponen", icon: <MdWidgets size={22} />, to: "/components" },
         { id: "fitur-xyz", name: "Fitur XYZ", icon: <HiOutlineCube size={22} />, to: "/fitur-xyz" }, 
         { id: "notes", name: "Notes", icon: <HiOutlineCube size={22} />, to: "/notes" },
-        // 2. Diubah ke ikon HiOutlineCube agar pas dengan tema komponen barumu
+        // Menu admin — hanya muncul jika user adalah admin
+        { id: "users", name: "User Management", icon: <AiFillAppstore size={22} />, to: "/admin/users", role: "admin" },
+        { id: "tiers", name: "Tier Management", icon: <MdWidgets size={22} />, to: "/admin/tiers", role: "admin" },
     ];
 
     // ✅ menuClass disesuaikan dengan class baru
@@ -50,7 +54,7 @@ export default function Sidebar() {
                 <nav className="space-y-1">
                     <p className="text-[10px] font-bold text-gray-400 ml-4 mb-4 uppercase tracking-[2px]">Overview</p>
                     <ul className="space-y-2">
-                        {menuList.map((item) => (
+                        {menuList.filter(item => isAdmin || item.role !== "admin").map((item) => (
                             <li key={item.id}>
                                 <NavLink to={item.to} className={menuClass}>
                                     {({ isActive }) => (
@@ -98,9 +102,13 @@ export default function Sidebar() {
                     </div>
 
                     <div className="mt-10">
-                        <h4 className="font-bold text-gray-800 text-sm">Organize Menus</h4>
-                        <p className="text-[11px] text-gray-400 mt-1 mb-5">Update your restaurant <br/>list in seconds.</p>
-                        
+                        <h4 className="font-bold text-gray-800 text-sm">{profile?.full_name || "User"}</h4>
+                        <p className="text-[11px] text-gray-400 mt-1 mb-2 capitalize">{profile?.role || "member"}</p>
+                        {profile?.total_points !== undefined && (
+                            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-5">
+                                Poin: {profile.total_points} {profile.member_tiers?.name ? `• ${profile.member_tiers.name}` : ""}
+                            </p>
+                        )}
                         <button className="group w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-green-600 text-white text-[11px] font-bold py-3 rounded-2xl transition-all duration-300 active:scale-95">
                             <FaPlus className="group-hover:rotate-90 transition-transform" />
                             ADD NEW MENU

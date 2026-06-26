@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PageHeader from "../components/PageHeader";
-import { customers } from "../data/customers";
+import { getCustomers, createCustomer } from "../services/supabaseService";
+import { useAuth } from "../contexts/AuthContext";
 import { 
     HiUserAdd, HiMail, HiPhone, HiBadgeCheck, 
     HiDotsVertical, HiSearch, HiFilter, HiOutlineCloudDownload,
@@ -8,7 +9,41 @@ import {
 } from "react-icons/hi";
 
 export default function Customers() {
+    const { profile } = useAuth();
+    const [customerList, setCustomerList] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+    const [saving, setSaving] = useState(false);
+
+    useEffect(() => { loadCustomers(); }, []);
+
+    async function loadCustomers() {
+        try {
+            setLoading(true);
+            const data = await getCustomers();
+            setCustomerList(data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleRegister() {
+        if (!formData.name.trim()) return alert("Nama tidak boleh kosong");
+        setSaving(true);
+        try {
+            await createCustomer({ ...formData, created_by: profile?.id });
+            setShowModal(false);
+            setFormData({ name: "", email: "", phone: "" });
+            await loadCustomers();
+        } catch (err) {
+            alert("Gagal: " + err.message);
+        } finally {
+            setSaving(false);
+        }
+    }
 
     return (
         <div className="min-h-screen bg-[#F4F7FA] p-8 md:p-12 relative overflow-hidden text-slate-900 font-sans">
@@ -77,51 +112,54 @@ export default function Customers() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/20">
-                                {customers.map((c, i) => (
-                                    <tr key={c.customerId} className="group hover:bg-white/80 transition-all duration-300">
-                                        <td className="px-10 py-7">
-                                            <div className="flex items-center gap-6">
-                                                <div className="relative group/avatar">
-                                                    <div className="w-14 h-14 rounded-[1.4rem] bg-gradient-to-tr from-slate-900 to-slate-700 flex items-center justify-center font-black text-white text-xl shadow-xl group-hover/avatar:scale-105 group-hover/avatar:rotate-3 transition-all duration-500">
-                                                        {c.customerName.charAt(0)}
+                                {loading ? (
+                                    <tr><td colSpan="4" className="text-center py-20 text-slate-400">Memuat data...</td></tr>
+                                ) : customerList.length === 0 ? (
+                                    <tr><td colSpan="4" className="text-center py-20 text-slate-400">Belum ada customer</td></tr>
+                                ) : (
+                                    customerList.map((c, i) => (
+                                        <tr key={c.id} className="group hover:bg-white/80 transition-all duration-300">
+                                            <td className="px-10 py-7">
+                                                <div className="flex items-center gap-6">
+                                                    <div className="relative group/avatar">
+                                                        <div className="w-14 h-14 rounded-[1.4rem] bg-gradient-to-tr from-slate-900 to-slate-700 flex items-center justify-center font-black text-white text-xl shadow-xl group-hover/avatar:scale-105 group-hover/avatar:rotate-3 transition-all duration-500">
+                                                            {c.name?.charAt(0) || '?'}
+                                                        </div>
+                                                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white shadow-sm animate-pulse"></div>
                                                     </div>
-                                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white shadow-sm animate-pulse"></div>
+                                                    <div>
+                                                        <div className="font-black text-slate-900 text-lg tracking-tight group-hover:text-indigo-600 transition-colors">{c.name}</div>
+                                                        <div className="inline-block text-[10px] font-black text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-md mt-1 tracking-widest uppercase">ID: {c.id?.slice(0, 8)}</div>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <div className="font-black text-slate-900 text-lg tracking-tight group-hover:text-indigo-600 transition-colors">{c.customerName}</div>
-                                                    <div className="inline-block text-[10px] font-black text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-md mt-1 tracking-widest uppercase">ID: {c.customerId}</div>
+                                            </td>
+                                            <td className="px-10 py-7">
+                                                <div className="flex flex-col gap-1">
+                                                    <div className="text-sm font-bold text-slate-700 flex items-center gap-2">
+                                                        <HiMail className="text-slate-300" />
+                                                        {c.email || '-'}
+                                                    </div>
+                                                    <div className="text-xs text-slate-400 font-semibold flex items-center gap-2">
+                                                        <HiPhone className="text-slate-200" />
+                                                        {c.phone || '-'}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-7">
-                                            <div className="flex flex-col gap-1">
-                                                <div className="text-sm font-bold text-slate-700 flex items-center gap-2">
-                                                    <HiMail className="text-slate-300" />
-                                                    {c.email}
+                                            </td>
+                                            <td className="px-10 py-7">
+                                                <div className="flex justify-center">
+                                                    <div className="bg-white text-slate-500 border border-slate-100 px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em]">
+                                                        {c.profile_id ? 'Member' : 'Guest'}
+                                                    </div>
                                                 </div>
-                                                <div className="text-xs text-slate-400 font-semibold flex items-center gap-2">
-                                                    <HiPhone className="text-slate-200" />
-                                                    {c.phone}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-7">
-                                            <div className="flex justify-center">
-                                                <div className={`px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 group-hover:scale-110
-                                                    ${c.loyalty === 'VIP' ? 'bg-slate-900 text-white shadow-[0_10px_20px_-5px_rgba(15,23,42,0.4)]' : 
-                                                      c.loyalty === 'Gold' ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-[0_10px_20px_-5px_rgba(251,191,36,0.4)]' : 
-                                                      'bg-white text-slate-500 border border-slate-100'}`}>
-                                                    {c.loyalty}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-7 text-right">
-                                            <button className="w-12 h-12 inline-flex items-center justify-center bg-transparent text-slate-300 rounded-2xl hover:bg-slate-900 hover:text-white hover:shadow-xl transition-all duration-300 group/btn">
-                                                <HiDotsVertical className="group-hover/btn:scale-125 transition-transform" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                            </td>
+                                            <td className="px-10 py-7 text-right">
+                                                <button className="w-12 h-12 inline-flex items-center justify-center bg-transparent text-slate-300 rounded-2xl hover:bg-slate-900 hover:text-white hover:shadow-xl transition-all duration-300 group/btn">
+                                                    <HiDotsVertical className="group-hover/btn:scale-125 transition-transform" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -146,34 +184,54 @@ export default function Customers() {
                             </div>
 
                             <div className="space-y-8">
-                                {[
-                                    { label: "Legal Entity Name", icon: <HiUserAdd />, placeholder: "Ex: Jonathan Wick" },
-                                    { label: "Business Email", icon: <HiMail />, placeholder: "john@continental.com" },
-                                    { label: "Global Secure Line", icon: <HiPhone />, placeholder: "+1 (555) 000-000" }
-                                ].map((field, idx) => (
-                                    <div key={idx} className="group relative">
-                                        <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-3 ml-2 group-focus-within:text-indigo-600 transition-colors">
-                                            {field.label}
-                                        </label>
-                                        <div className="relative">
-                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-200 group-focus-within:text-indigo-600 group-focus-within:scale-110 transition-all">
-                                                {field.icon}
-                                            </div>
-                                            <input 
-                                                className="w-full bg-slate-50 border-2 border-transparent rounded-[1.8rem] py-5 pl-16 pr-8 text-slate-800 font-bold focus:outline-none focus:bg-white focus:border-indigo-100 focus:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all placeholder:text-slate-200"
-                                                placeholder={field.placeholder}
-                                            />
+                                <div className="group relative">
+                                    <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-3 ml-2 group-focus-within:text-indigo-600 transition-colors">
+                                        Legal Entity Name
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-200 group-focus-within:text-indigo-600 group-focus-within:scale-110 transition-all">
+                                            <HiUserAdd />
                                         </div>
+                                        <input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                            className="w-full bg-slate-50 border-2 border-transparent rounded-[1.8rem] py-5 pl-16 pr-8 text-slate-800 font-bold focus:outline-none focus:bg-white focus:border-indigo-100 focus:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all placeholder:text-slate-200"
+                                            placeholder="Ex: Jonathan Wick" />
                                     </div>
-                                ))}
+                                </div>
+                                <div className="group relative">
+                                    <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-3 ml-2 group-focus-within:text-indigo-600 transition-colors">
+                                        Business Email
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-200 group-focus-within:text-indigo-600 group-focus-within:scale-110 transition-all">
+                                            <HiMail />
+                                        </div>
+                                        <input value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                            className="w-full bg-slate-50 border-2 border-transparent rounded-[1.8rem] py-5 pl-16 pr-8 text-slate-800 font-bold focus:outline-none focus:bg-white focus:border-indigo-100 focus:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all placeholder:text-slate-200"
+                                            placeholder="john@continental.com" />
+                                    </div>
+                                </div>
+                                <div className="group relative">
+                                    <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-3 ml-2 group-focus-within:text-indigo-600 transition-colors">
+                                        Global Secure Line
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-200 group-focus-within:text-indigo-600 group-focus-within:scale-110 transition-all">
+                                            <HiPhone />
+                                        </div>
+                                        <input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                            className="w-full bg-slate-50 border-2 border-transparent rounded-[1.8rem] py-5 pl-16 pr-8 text-slate-800 font-bold focus:outline-none focus:bg-white focus:border-indigo-100 focus:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all placeholder:text-slate-200"
+                                            placeholder="+1 (555) 000-000" />
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="mt-16">
                                 <button 
-                                    onClick={() => setShowModal(false)}
-                                    className="w-full bg-slate-900 text-white font-black py-6 rounded-[2.2rem] hover:bg-indigo-600 shadow-[0_25px_50px_-12px_rgba(79,70,229,0.3)] transition-all hover:-translate-y-2 active:translate-y-0"
+                                    onClick={handleRegister}
+                                    disabled={saving}
+                                    className="w-full bg-slate-900 text-white font-black py-6 rounded-[2.2rem] hover:bg-indigo-600 shadow-[0_25px_50px_-12px_rgba(79,70,229,0.3)] transition-all hover:-translate-y-2 active:translate-y-0 disabled:opacity-50"
                                 >
-                                    AUTHORIZE & SAVE DATA
+                                    {saving ? 'MENYIMPAN...' : 'AUTHORIZE & SAVE DATA'}
                                 </button>
                             </div>
                         </div>

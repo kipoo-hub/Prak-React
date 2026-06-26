@@ -1,11 +1,13 @@
 import axios from 'axios'
 
-const API_URL = "https://uiidaubizfomcsdhltvg.supabase.co/rest/v1/note"
-const API_KEY = "sb_publishable_RBR1j12hdNj5RX98LrJlOw_MQw2FWVc"
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+const API_URL = `${supabaseUrl}/rest/v1/note`
 
 const headers = {
-    apikey: API_KEY,
-    Authorization: `Bearer ${API_KEY}`,
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${supabaseAnonKey}`,
     "Content-Type": "application/json",
 }
 

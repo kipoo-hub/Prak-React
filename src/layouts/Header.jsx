@@ -1,11 +1,10 @@
 import { useState } from "react";
-// PASTIKAN SEMUA ICON INI SUDAH DI IMPORT
-import { FaBell, FaSearch } from "react-icons/fa";
-import { FcAreaChart } from "react-icons/fc";
-import { SlSettings } from "react-icons/sl";
-import { HiOutlineLightningBolt } from "react-icons/hi"; // <--- INI SERING TERLUPA
+import { FaBell, FaSearch, FaSignOutAlt } from "react-icons/fa";
+import { HiOutlineLightningBolt } from "react-icons/hi";
+import { useAuth } from "../contexts/AuthContext"
 
 export default function Header({ searchTerm, setSearchTerm }) {
+    const { profile, signOut } = useAuth();
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -37,13 +36,25 @@ export default function Header({ searchTerm, setSearchTerm }) {
 
                     <div className="flex items-center space-x-4 border-l pl-4 border-gray-300">
                         <span className="hidden md:inline text-sm">
-                            Hai, <span className="font-bold">Muhammad Taufiq</span>
+                            Hai, <span className="font-bold">{profile?.full_name || "User"}</span>
+                            {profile?.role === "admin" && (
+                                <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                    Admin
+                                </span>
+                            )}
                         </span>
                         <img
                             src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png"
                             className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
                             alt="avatar"
                         />
+                        <button
+                            onClick={signOut}
+                            className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                            title="Keluar"
+                        >
+                            <FaSignOutAlt />
+                        </button>
                     </div>
                 </div>
             </div>
